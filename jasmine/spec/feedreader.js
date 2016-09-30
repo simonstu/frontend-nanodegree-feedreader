@@ -85,9 +85,10 @@ $(function() {
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
         beforeEach(function(done) {
-            setTimeout(function() {
-                done();
-            }, 1500);
+            //setTimeout(function() {
+            //    done();
+            //}, 1500);
+            loadFeed(0, function() { done(); } );
         });
 
         it('are loaded', function(done) {
@@ -105,16 +106,14 @@ $(function() {
         var initialFeedEntryHref;
 
         beforeEach(function(done) {
-            setTimeout(function() {
-                // initial entries of the first feed should be loaded -> save link of first entry
+            loadFeed(0, function() {
+                // after successfully loading first feed entries save the href of the the first entry
                 initialFeedEntryHref = $('.feed > .entry-link').first().attr("href");
-                // click last element in feed list
-                $('.feed-list li a').last().trigger( "click" );
-                // start another timer to wait for new entries of the feed to load
-                setTimeout(function() {
+                // load the second feed entries and evoke done() once it is loaded
+                loadFeed(1, function() {
                     done();
-                }, 3000);
-            }, 1500);
+                });
+            });
         });
 
         it('loads new feed entries', function(done) {
